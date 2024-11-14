@@ -1,15 +1,17 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <ComHeader/>
+  <ComFooter />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import ComFooter from './components/ComFooter.vue';
+import ComHeader from './components/ComHeader.vue';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    ComHeader,
+    ComFooter,
   }
 }
 </script>
