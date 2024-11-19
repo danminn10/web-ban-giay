@@ -9,25 +9,45 @@
 
       <!-- Navigation Links -->
       <nav class="nav-links">
-        <router-link to="/" class="nav-item">Trang Chủ</router-link>
-        <router-link to="/shoes" class="nav-item">Giày</router-link>
-        <router-link to="/about" class="nav-item">Giới Thiệu</router-link>
-        <router-link to="/contact" class="nav-item">Liên Hệ</router-link>
-        <router-link to="/news" class="nav-item">Tin Tức</router-link>
+        <router-link to="/" class="nav-item">
+          <i class="fas fa-home"></i> Trang Chủ
+        </router-link>
+        <router-link to="/shoes" class="nav-item">
+          <i class="fas fa-shoe-prints"></i> Giày
+        </router-link>
+        <router-link to="/about" class="nav-item">
+          <i class="fas fa-info-circle"></i> Giới Thiệu
+        </router-link>
+        <router-link to="/contact" class="nav-item">
+          <i class="fas fa-envelope"></i> Liên Hệ
+        </router-link>
+        <router-link to="/news" class="nav-item">
+          <i class="fas fa-newspaper"></i> Tin Tức
+        </router-link>
       </nav>
 
       <!-- User Actions -->
       <div class="user-actions">
-        <router-link v-if="user == null" to="/register" class="nav-item">Đăng Ký</router-link>
-        <router-link v-if="user == null" to="/login" class="nav-item">Đăng Nhập</router-link>
+        <router-link v-if="user == null" to="/register" class="nav-item">
+          <i class="fas fa-user-plus"></i> Đăng Ký
+        </router-link>
+        <router-link v-if="user == null" to="/login" class="nav-item">
+          <i class="fas fa-sign-in-alt"></i> Đăng Nhập
+        </router-link>
       </div>
       <div v-if="user" class="user-info">
-        <p>Xin chào, {{ user.fullName }}</p>
-        <button @click="logout">Đăng xuất</button>
+        <p>
+          <i class="fas fa-user-circle"></i> Xin chào, {{ user.fullName }}
+        </p>
+        <button @click="logout" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i> Đăng Xuất
+        </button>
       </div>
+
+      <!-- Cart Icon -->
       <div class="header-icons">
         <router-link to="/cart">
-          <img src="@/assets/cart-icon.png" alt="Cart" class="cart-icon" />
+          <i class="fas fa-shopping-cart cart-icon"></i>
         </router-link>
       </div>
     </div>
@@ -64,15 +84,26 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+
 .header {
-  background-color: #2c3e50; /* Updated background color */
-  color: #ecf0f1; /* Updated text color */
-  padding: 10px 0;
-  position: fixed; /* Fix header at the top of the screen */
-  top: 0; /* Position at the very top */
-  width: 100%; /* Make header full-width */
-  z-index: 1000; /* Ensure header stays above other content */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Optional: add shadow for a subtle effect */
+  background-color: #2c3e50;
+  color: #ecf0f1;
+  padding: 10px 0; /* Giảm khoảng cách padding */
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.logo img {
+  height: 35px; /* Giảm chiều cao logo */
+  margin-right: 10px;
+}
+
+main {
+  padding-top: 60px; /* Điều chỉnh theo chiều cao header mới */
 }
 
 .header-container {
@@ -90,14 +121,14 @@ export default {
 }
 
 .logo img {
-  height: 40px;
+  height: 50px;
   margin-right: 10px;
 }
 
 .logo span {
   font-weight: bold;
-  font-size: 1.2em;
-  color: #ecf0f1; /* Updated text color */
+  font-size: 1.5em;
+  color: #f39c12;
 }
 
 .nav-links {
@@ -106,13 +137,17 @@ export default {
 }
 
 .nav-item {
-  color: #ecf0f1; /* Updated text color */
+  color: #ecf0f1;
   text-decoration: none;
-  font-size: 1em;
+  font-size: 1.1em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.3s ease;
 }
 
 .nav-item:hover {
-  color: #bdc3c7; /* Updated hover color */
+  color: #f39c12;
 }
 
 .user-actions {
@@ -128,25 +163,36 @@ export default {
 
 .user-info p {
   margin: 0;
-  color: #ecf0f1; /* Updated text color */
+  font-size: 1em;
 }
 
-.user-actions .nav-item {
-  color: #f39c12; /* Updated text color */
+.logout-btn {
+  background-color: transparent;
+  border: none;
+  color: #e74c3c;
+  cursor: pointer;
+  font-size: 1em;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
-.user-actions .nav-item:hover {
-  color: #e67e22; /* Updated hover color */
+.logout-btn:hover {
+  color: #c0392b;
 }
 
 .cart-icon {
-  width: 30px;
-  height: 30px;
+  font-size: 1.5em;
+  color: #f39c12;
   cursor: pointer;
+  transition: color 0.3s ease;
 }
 
-/* Add padding to the top of the main content to prevent it from being hidden under the fixed header */
+.cart-icon:hover {
+  color: #e67e22;
+}
+
 main {
-  padding-top: 70px; /* Adjust based on header height */
+  padding-top: 80px;
 }
 </style>

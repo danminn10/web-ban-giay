@@ -44,33 +44,77 @@
   
   <style scoped>
   .about {
-    max-width: 800px;
-    margin: auto;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  max-width: 1200px; /* Tăng chiều rộng tối đa */
+  margin: 40px auto; /* Căn giữa và tạo khoảng cách trên/dưới */
+  padding: 30px;
+  font-family: 'Roboto', Arial, sans-serif; /* Font chữ hiện đại */
+  background-color: #ffffff; /* Màu nền trắng sạch */
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ nhàng */
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Chia thành hai cột */
+  gap: 20px; /* Khoảng cách giữa các cột */
+  align-items: center;
+}
+
+h1 {
+  grid-column: 1 / -1; /* Tiêu đề chiếm cả hai cột */
+  text-align: center;
+  margin-bottom: 20px;
+  color: #2c3e50; /* Màu xanh đậm chuyên nghiệp */
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+p {
+  line-height: 1.8; /* Dễ đọc hơn */
+  margin-bottom: 20px;
+  color: #555; /* Màu xám nhạt */
+  font-size: 1rem;
+}
+
+ul {
+  grid-column: 1 / -1; /* Danh sách chiếm cả hai cột */
+  padding: 0;
+  list-style-type: none;
+}
+
+li {
+  margin-bottom: 20px;
+  padding-left: 20px;
+  position: relative;
+}
+
+li::before {
+  content: "•"; /* Thêm ký hiệu đầu mục */
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #3498db; /* Màu xanh hiện đại */
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.store-image {
+  max-width: 100%; /* Đảm bảo hình ảnh không vượt quá chiều rộng cột */
+  height: auto;
+  border-radius: 10px; /* Bo góc nhẹ nhàng */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); /* Đổ bóng đẹp mắt */
+  margin-top: 20px;
+}
+
+@media (max-width: 1024px) {
+  .about {
+    grid-template-columns: 1fr; /* Chuyển thành một cột trên màn hình nhỏ */
   }
-  
+
   h1 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #333;
+    font-size: 1.5rem;
   }
-  
+
   p {
-    line-height: 1.6;
-    margin-bottom: 20px;
-    color: #555;
+    font-size: 0.95rem;
   }
-  
-  .store-image {
-    display: block;
-    max-width: 100%;
-    height: auto;
-    margin: 20px auto;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
+}
+
   </style>

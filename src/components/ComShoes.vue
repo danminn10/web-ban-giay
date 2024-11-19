@@ -1,201 +1,252 @@
 <template>
-  <div class="shoes">
-    <h1>Giày Sneaker</h1>
-    <div class="controls">
-      <div class="search-box">
-        <i class="fas fa-search"></i>
-        <input type="text" v-model="searchQuery" placeholder="Tìm kiếm sản phẩm..." />   
+    <div class="shoes-container">
+      <div class="controls">
+        <input v-model="searchQuery" placeholder="Search products..." />
+        <select v-model="sortOrder" @change="sortProducts">
+          <option value="asc">Price: Low to High</option>
+          <option value="desc">Price: High to Low</option>
+        </select>
       </div>
-      <select v-model="sortOption">
-        <option value="asc">Giá tăng dần</option>
-        <option value="desc">Giá giảm dần</option>
-        <option value="alpha">Tên (A-Z)</option>
-      </select>
-    </div>
-    
-    <div class="shoe-list">
-      <!-- Pagination Controls with Current Page Indicator and Clickable Page Numbers -->
-      <button @click="prevPage" :disabled="currentPage === 1">‹</button>
-
-      <!-- Render page numbers dynamically -->
-      <span
-        v-for="page in pageNumbers"
-        :key="page"
-        :class="{ active: page === currentPage }"
-        @click="goToPage(page)"
-        class="page-number"
-      >
-        {{ page }}
-      </span>
-
-      <button @click="nextPage" :disabled="currentPage === totalPages">›</button>
-
-      <div class="shoe-slide">
-        <!-- Display paginated shoes -->
-        <ComProduct v-for="item in paginatedShoes" :key="item.id" :product="item" />
+      <div class="product-list">
+        <router-link
+          v-for="product in paginatedProducts"
+          :key="product.id"
+          :to="{ name: 'ProductDetail', params: { id: product.id } }"
+          class="no-underline"
+        >
+          <div class="product-card">
+            <div class="stock-status" :class="{ 'out-of-stock': product.quantity === 0 }">
+              {{ product.quantity > 0 ? 'Còn hàng' : 'Hết hàng' }}
+            </div>
+            <img :src="product.imageUrl" :alt="product.productName" class="product-image" />
+            <h2>{{ product.productName }}</h2>
+            <p>{{ product.description }}</p>
+            <p>Price: {{ product.priceRange }} VND</p>
+            <span class="rating">⭐ {{ product.starRating }}</span>
+          </div>
+        </router-link>
+      </div>
+      <div class="pagination">
+        <button v-if="currentPage > 1" @click="prevPage" >Previous</button>
+        <span>Page {{ currentPage }} of {{ totalPages }}</span>
+        <button v-if="currentPage < totalPages" @click="nextPage">Next</button>
       </div>
     </div>
-  </div>
-</template>
+  </template>
+  
+  <script>
+  import axios from 'axios';
+  
+  export default {
+    name: 'ComShoes',
+    data() {
+      return {
+        products: [],
+        searchQuery: '',
+        sortOrder: 'asc',
+        currentPage: 1,
+        itemsPerPage: 4,
+      };
+    },
+    computed: {
+      filteredProducts() {
+        let filtered = this.products.filter(product =>
+          product.productName.toLowerCase().includes(this.searchQuery.toLowerCase())
+        );
+        if (this.sortOrder === 'asc') {
+          filtered.sort((a, b) => a.priceRange - b.priceRange);
+        } else {
+          filtered.sort((a, b) => b.priceRange - a.priceRange);
+        }
+        return filtered;
+      },
+      paginatedProducts() {
+        const start = (this.currentPage - 1) * this.itemsPerPage;
+        const end = start + this.itemsPerPage;
+        return this.filteredProducts.slice(start, end);
+      },
+      totalPages() {
+        return Math.ceil(this.filteredProducts.length / this.itemsPerPage);
+      },
+    },
+    methods: {
+      async fetchProducts() {
+        try {
+          const response = await axios.get('http://localhost:3000/api/products');
+          this.products = response.data;
+        } catch (error) {
+          console.error('Error fetching products:', error);
+        }
+      },
+      sortProducts() {
+        this.filteredProducts;
+      },
+      nextPage() {
+        if (this.currentPage < this.totalPages) {
+          this.currentPage++;
+        }
+      },
+      prevPage() {
+        if (this.currentPage > 1) {
+          this.currentPage--;
+        }
+      },
+    },
+    created() {
+      this.fetchProducts();
+    },
+  };
+  </script>
+  
+  <style scoped>
+  @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
 
-<script>
-import ComProduct from './ComProduct.vue';
-import axios from 'axios';
-
-export default {
-  name: 'ComShoes',
-  components: {
-    ComProduct,
-  },
-  data() {
-    return {
-      shoes: [], // Array to store shoe data fetched from API
-      searchQuery: '', // Search query for filtering products
-      sortOption: 'asc', // Sorting option for product list
-      currentPage: 1, // Current page in pagination
-      pageSize: 4, // Number of items per page
-    };
-  },
-  computed: {
-    // Filter and sort shoes based on search query and selected sort option
-    filteredShoes() {
-      let filtered = this.shoes.filter(shoe =>
-        shoe.productName.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
-      if (this.sortOption === 'asc') {
-        filtered.sort((a, b) => a.priceRange - b.priceRange);
-      } else if (this.sortOption === 'desc') {
-        filtered.sort((a, b) => b.priceRange - a.priceRange);
-      } else if (this.sortOption === 'alpha') {
-        filtered.sort((a, b) => a.productName.localeCompare(b.productName));
-      }
-      return filtered;
-    },
-    // Paginate filtered shoes based on current page and page size
-    paginatedShoes() {
-      const start = (this.currentPage - 1) * this.pageSize;
-      const end = start + this.pageSize;
-      return this.filteredShoes.slice(start, end);
-    },
-    // Calculate the total number of pages based on filtered shoe length and page size
-    totalPages() {
-      return Math.ceil(this.filteredShoes.length / this.pageSize);
-    },
-    // Generate an array of page numbers for pagination
-    pageNumbers() {
-      return Array.from({ length: this.totalPages }, (_, index) => index + 1);
-    },
-  },
-  created() {
-    // Fetch shoes from API when component is created
-    this.fetchShoes();
-  },
-  methods: {
-    // Fetches shoe data from API
-    async fetchShoes() {
-      try {
-        const response = await axios.get('http://localhost:3000/api/products');
-        this.shoes = response.data;
-      } catch (error) {
-        console.error('There was an error fetching shoes:', error);
-      }
-    },
-    // Moves to the previous page
-    prevPage() {
-      if (this.currentPage > 1) {
-        this.currentPage -= 1;
-      }
-    },
-    // Moves to the next page
-    nextPage() {
-      if (this.currentPage < this.totalPages) {
-        this.currentPage += 1;
-      }
-    },
-    // Jumps to the selected page
-    goToPage(page) {
-      this.currentPage = page;
-    },
-  },
-}
-</script>
-
-<style scoped>
-.shoes {
+.shoes-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 20px;
+  background-color: #f4f6f9; /* Nền sáng hiện đại */
+  font-family: 'Roboto', Arial, sans-serif; /* Font hiện đại */
 }
 
 .controls {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  gap: 20px;
   margin-bottom: 20px;
+  justify-content: center;
 }
 
-.search-box {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.search-box input {
-  padding: 8px 32px 8px 8px;
+.controls input {
+  padding: 10px;
   border: 1px solid #ddd;
-  border-radius: 4px;
-  width: 200px;
-}
-
-.search-box i {
-  position: absolute;
-  right: 8px;
-  color: #aaa;
+  border-radius: 8px;
+  width: 300px;
+  font-size: 14px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .controls select {
-  padding: 8px;
+  padding: 10px;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 8px;
+  font-size: 14px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.shoe-list {
+.product-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Bố cục lưới tự động */
+  gap: 20px;
+  justify-content: center;
+  width: 100%;
+  grid-auto-rows: 1fr; /* Đảm bảo chiều cao đồng đều */
+}
+
+
+.no-underline {
+  text-decoration: none;
+}
+
+.product-card {
+  position: relative;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  min-height: 400px; /* Đặt chiều cao tối thiểu */
+}
+
+.product-card:hover {
+  transform: translateY(-10px); /* Nhẹ nhàng nâng lên */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.stock-status {
+  position: absolute;
+  top: 10px;
+  right: 10px; /* Di chuyển trạng thái sang góc phải */
+  background-color: #27ae60; /* Màu xanh lá cây */
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stock-status.out-of-stock {
+  background-color: #e74c3c; /* Màu đỏ nếu hết hàng */
+}
+
+.product-image {
+  width: 100%;
+  height: 200px; /* Tăng chiều cao hình ảnh */
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+h2 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #2c3e50; /* Xanh đậm chuyên nghiệp */
+  margin-bottom: 10px;
+}
+
+p {
+  font-size: 0.95rem;
+  color: #7f8c8d;
+  margin-bottom: 10px;
+}
+
+.rating {
+  font-size: 1rem;
+  color: #f39c12; /* Màu vàng cho sao */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.rating i {
+  margin-right: 4px;
+}
+
+.pagination {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
   align-items: center;
 }
 
-.shoe-slide {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-  flex: 1;
-}
-
-button {
-  background-color: #3498db;
+.pagination button {
+  padding: 10px 20px;
+  font-size: 14px;
   color: white;
+  background-color: #3498db;
   border: none;
-  padding: 10px;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background 0.3s ease;
 }
 
-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
+.pagination button:hover {
+  background-color: #2980b9; /* Tông xanh đậm khi hover */
 }
 
-/* Styling for pagination numbers */
-.page-number {
-  margin: 0 5px;
-  padding: 5px 10px;
-  cursor: pointer;
-  border-radius: 4px;
-  background-color: #eee;
-}
-
-.page-number.active {
-  background-color: #3498db;
-  color: white;
+.pagination span {
+  font-size: 14px;
   font-weight: bold;
+  color: #34495e;
 }
-</style>
+
+  </style>

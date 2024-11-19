@@ -3,7 +3,7 @@
     <div class="footer-content">
       <!-- Left Section -->
       <div class="footer-section">
-        <h2>AUTHENTIC SHOES</h2>
+        <h2>DANGMINH SHOES</h2>
         <p>Hộ Kinh Doanh Nguyễn Đăng Minh MST: 01E8027929</p>
         <p>DangMinh Shoes - Nhà phân phối chính hãng các thương hiệu thời trang quốc tế hàng đầu Việt Nam</p>
       </div>
@@ -11,7 +11,7 @@
       <!-- Store Information Section -->
       <div class="footer-section">
         <h3>HỆ THỐNG CỬA HÀNG</h3>
-        <p><i class="fas fa-map-marker-alt"></i> 561 Nguyễn Đình Chiểu Phường 2, Quận 3, TP. Hồ Chí Minh</p>
+        <p><i class="fas fa-map-marker-alt"></i> 389/3/4A, Quốc Lộ 13, Hiệp Bình Phước, Tp. Thủ Đức</p>
         <p><i class="fas fa-phone"></i> Hotline: 0348468065</p>
         <p><i class="fas fa-envelope"></i> Email: Dangminhn10@gmail.com</p>
       </div>

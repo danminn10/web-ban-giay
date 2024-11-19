@@ -1,9 +1,7 @@
 <template>
   <div class="product-list">
     <router-link
-      v-for="product in products"
-      :key="product.id"
-      :to="{ name: 'ProductDetail', params: { id: product.id } }"
+      :to="{ name: 'ProductDetail', params: { id } }"
       class="no-underline"
     >
       <div class="product-card">
@@ -21,88 +19,107 @@
 </template>
 
 <script>
-import axios from 'axios';
 
 export default {
-  data() {
-    return {
-      products: [],
-    };
-  },
-  created() {
-    this.fetchProducts();
-  },
-  methods: {
-    async fetchProducts() {
-      try {
-        const response = await axios.get('http://localhost:3000/api/products');
-        this.products = response.data.filter((product, index, self) => index === self.findIndex(p => p.id === product.id));
-      } catch (error) {
-        console.error('There was an error!', error);
-      }
+  name: 'ComProduct',
+  props:['product'],
+    data(){
+        return{
+            id: this.product.id
+        }
     }
-  }
 };
 </script>
 
 <style scoped>
-.product-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-}
 
 .no-underline {
   text-decoration: none;
 }
 
+.product-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Bố cục dạng lưới tự động */
+  gap: 10px;
+  padding: 10px;
+  background-color: #f4f6f9;
+}
+
 .product-card {
   position: relative;
   border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 16px;
-  width: 250px;
-  height: 400px;
-  text-align: center;
+  border-radius: 10px;
+  padding: 8px;
+  background-color: #fff;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  font-size: 15px;
-  color: #333;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+
+  /* Đảm bảo chiều cao đồng nhất */
+  min-height: 450px; /* Đặt chiều cao tối thiểu để khắc phục */
 }
+
+.product-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
 
 .stock-status {
   position: absolute;
   top: 10px;
-  left: 10px;
-  background-color: green;
+  background-color: #27ae60; /* Xanh lá đậm hơn */
   color: white;
-  padding: 5px 10px;
-  border-radius: 4px;
-  font-size: 0.9em;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85em;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .stock-status.out-of-stock {
-  background-color: red;
+  background-color: #e74c3c; /* Đỏ đậm hơn */
 }
 
 .product-image {
   width: 100%;
-  height: 150px;
+  height: 180px; /* Tăng chiều cao để hình ảnh nổi bật hơn */
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 10px;
   margin-bottom: 12px;
 }
 
-h2,
-p,
-.rating {
-  text-decoration: none;
-  color: #333;
+h2 {
+  font-size: 1.1rem; /* Kích thước tiêu đề hợp lý */
+  font-weight: bold;
+  color: #2c3e50; /* Màu xanh đậm */
+  margin-bottom: 8px;
+}
+
+p {
+  font-size: 0.9rem; /* Kích thước chữ nhỏ gọn */
+  color: #7f8c8d; /* Màu xám nhạt */
 }
 
 .rating {
-  color: #f39c12;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #f39c12; /* Vàng đậm */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.price {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #34495e; /* Xanh đậm */
+  margin: 10px 0;
 }
 </style>
