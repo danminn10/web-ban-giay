@@ -41,7 +41,6 @@ exports.createOrder = async (req, res) => {
             return total + (product.priceRange * cartItem.quantity);
         }, 0);
         
-
         // Tạo hóa đơn
         const newOrder = await Order.create(
             {

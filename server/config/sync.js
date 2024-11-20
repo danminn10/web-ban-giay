@@ -1,10 +1,4 @@
 const sequelize = require('./database');
-const User = require('../models/User');
-const Product = require('../models/Product');
-const Cart = require('../models/Cart');
-const Order = require('../models/Order');
-const OrderItem = require('../models/OrderItem');
-const Payment = require('../models/Payment');
 
 const syncDatabase = async () => {
     try {

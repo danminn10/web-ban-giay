@@ -245,7 +245,7 @@ export default {
           });
           alert(response.data.message || 'Đặt hàng thành công!');
           this.cart = [];
-          this.$router.push('/thank-you');
+          this.$router.push('/');
         }
       } catch (error) {
         console.error('Lỗi khi đặt hàng:', error);

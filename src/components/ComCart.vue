@@ -13,21 +13,31 @@
 
     <!-- Hiển thị danh sách sản phẩm trong giỏ hàng -->
     <div v-else>
-      <div class="cart-items">
-        <div
-          class="cart-item"
-          v-for="(item, index) in cart"
-          :key="item.id || index"
-        >
-          <img
-            :src="item.imageUrl || 'placeholder.png'"
-            alt="Product Image"
-            class="product-image"
-          />
-          <div class="product-details">
-            <p class="product-name">{{ item.productName || 'Sản phẩm không xác định' }}</p>
-            <p class="product-size">Size: {{ item.size || 'N/A' }}</p>
-            <p class="product-price">{{ item.priceRange ? item.priceRange.toLocaleString() : '0' }} ₫</p>
+      <div class="cart-content">
+        <!-- Danh sách sản phẩm -->
+        <div class="cart-items">
+          <div
+            class="cart-item"
+            v-for="(item, index) in cart"
+            :key="item.id || index"
+          >
+            <!-- Hình ảnh sản phẩm -->
+            <img
+              :src="item.imageUrl || 'placeholder.png'"
+              alt="Product Image"
+              class="product-image"
+            />
+            <!-- Thông tin sản phẩm -->
+            <div class="product-details">
+              <p class="product-name">{{ item.productName || 'Sản phẩm không xác định' }}</p>
+              <p class="product-size">
+                <i class="fas fa-shoe-prints"></i> Size: {{ item.size || 'N/A' }}
+              </p>
+              <p class="product-price">
+                <i class="fas fa-tag"></i> {{ item.priceRange ? item.priceRange.toLocaleString() : '0' }} ₫
+              </p>
+            </div>
+            <!-- Điều chỉnh số lượng -->
             <div class="quantity-controls">
               <button @click="decreaseQuantity(index)">
                 <i class="fas fa-minus"></i>
@@ -37,26 +47,29 @@
                 <i class="fas fa-plus"></i>
               </button>
             </div>
+            <!-- Nút xóa -->
+            <button @click="removeFromCart(index)" class="remove-button">
+              <i class="fas fa-trash-alt"></i>
+            </button>
           </div>
-          <button @click="removeFromCart(index)" class="remove-button">
-            <i class="fas fa-trash"></i> Xóa
+        </div>
+
+        <!-- Tóm tắt giỏ hàng -->
+        <div class="cart-summary">
+          <div class="summary-item">
+            <span><i class="fas fa-calculator"></i> Tổng cộng: </span>
+            <span class="total-amount">{{ subtotal.toLocaleString() }} ₫</span>
+          </div>
+          <button @click="proceedToCheckout" class="checkout-button">
+            <i class="fas fa-shopping-bag"></i> Đặt hàng
           </button>
         </div>
-      </div>
-
-      <!-- Tổng giá trị và nút thanh toán -->
-      <div class="cart-summary">
-        <div class="summary-item">
-          <span>Tổng cộng: </span>
-          <span class="total-amount">{{ subtotal.toLocaleString() }} ₫</span>
-        </div>
-        <button @click="proceedToCheckout" class="checkout-button">
-          <i class="fas fa-credit-card"></i> Thanh toán
-        </button>
       </div>
     </div>
   </div>
 </template>
+
+
 
 <script>
 import axios from 'axios';
@@ -180,25 +193,24 @@ export default {
 };
 </script>
 
-
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
 
 /* Container tổng thể */
 .cart-container {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 40px auto;
   padding: 20px;
   border-radius: 10px;
-  background-color: #ffffff;
+  background-color: #f9f9f9;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   font-family: 'Roboto', sans-serif;
 }
 
 /* Tiêu đề */
 h2 {
-  font-size: 2rem;
+  font-size: 2.5rem;
   color: #333;
   text-align: center;
   margin-bottom: 30px;
@@ -210,55 +222,72 @@ h2 {
   color: #888;
 }
 .empty-cart .empty-icon {
-  font-size: 4rem;
-  margin-bottom: 10px;
+  font-size: 5rem;
+  margin-bottom: 15px;
+  color: #ccc;
 }
 .continue-shopping {
   display: inline-block;
   margin-top: 20px;
-  color: #3498db;
+  color: #329bbd;
+  font-weight: bold;
   text-decoration: none;
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: 1.2rem;
 }
 .continue-shopping:hover {
+  color: #287693;
   text-decoration: underline;
+}
+
+/* Phần nội dung chính */
+.cart-content {
+  display: flex;
+  gap: 20px;
 }
 
 /* Danh sách sản phẩm */
 .cart-items {
-  margin-bottom: 30px;
+  flex: 2;
 }
 .cart-item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  padding: 15px;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #eee;
 }
 .product-image {
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   object-fit: cover;
   border-radius: 8px;
-  margin-right: 20px;
+  margin-right: 15px;
 }
 .product-details {
   flex: 1;
-  margin-right: 20px;
+  margin-right: 10px;
 }
 .product-details p {
   margin: 5px 0;
+  font-size: 1rem;
+  color: #555;
 }
 .product-name {
-  font-weight: 500;
+  font-weight: bold;
+  font-size: 1.2rem;
   color: #333;
+}
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .quantity-controls button {
   width: 30px;
   height: 30px;
-  background-color: #3498db;
+  background-color: #329bbd;
   color: white;
   border: none;
   border-radius: 50%;
@@ -270,46 +299,55 @@ h2 {
   justify-content: center;
 }
 .quantity-controls button:hover {
-  background-color: #2980b9;
+  background-color: #287693;
 }
 .remove-button {
   background-color: #e74c3c;
   color: white;
   border: none;
   border-radius: 4px;
-  padding: 10px 15px;
+  padding: 8px 12px;
   cursor: pointer;
 }
 .remove-button:hover {
   background-color: #c0392b;
 }
 
-/* Tổng cộng và thanh toán */
+/* Phần tóm tắt giỏ hàng */
 .cart-summary {
-  text-align: right;
+  flex: 1;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  height: fit-content;
 }
 .summary-item {
-  font-size: 1.2rem;
-  color: #333;
+  font-size: 1.5rem;
+  color: #555;
   margin-bottom: 15px;
 }
 .total-amount {
   font-weight: bold;
+  font-size: 1.8rem;
   color: #329bbd;
 }
 .checkout-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
+  width: 100%;
   padding: 15px 30px;
   background-color: #329bbd;
   color: white;
   border: none;
   border-radius: 5px;
   font-size: 1.2rem;
+  font-weight: bold;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 .checkout-button:hover {
-  background-color: #2b4c59;
+  background-color: #287693;
 }
 </style>

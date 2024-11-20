@@ -93,7 +93,7 @@ export default {
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 1000;
+  z-index: 100;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
@@ -139,7 +139,7 @@ main {
 .nav-item {
   color: #ecf0f1;
   text-decoration: none;
-  font-size: 1.1em;
+  font-size: 1em;
   display: flex;
   align-items: center;
   gap: 8px;

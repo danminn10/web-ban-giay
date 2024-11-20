@@ -10,15 +10,20 @@
           <div class="image-container">
             <img :src="product.imageUrl" :alt="product.productName" class="product-image" />
             <div class="stock-status" :class="{ 'out-of-stock': product.quantity === 0 }">
+              <i class="fas" :class="product.quantity > 0 ? 'fa-check-circle' : 'fa-times-circle'"></i>
               {{ stockStatus }}
             </div>
           </div>
         </div>
         <div class="right-column">
-          <h2>{{ product.productName }}</h2>
-          <p class="price">Giá: {{ product.priceRange.toLocaleString() }} VND</p>
+          <h2>
+            <i class="fas fa-box"></i> {{ product.productName }}
+          </h2>
+          <p class="price">
+            <i class="fas fa-tag"></i> Giá: {{ product.priceRange.toLocaleString() }} VND
+          </p>
           <div class="size-selection">
-            <label>Chọn size:</label>
+            <label><i class="fas fa-shoe-prints"></i> Chọn size:</label>
             <div class="size-buttons">
               <button
                 v-for="size in product.availableSizes"
@@ -31,7 +36,7 @@
             </div>
           </div>
           <button class="add-to-cart" @click="addToCart" :disabled="product.quantity === 0">
-            Thêm vào giỏ hàng
+            <i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng
           </button>
         </div>
       </div>
@@ -42,7 +47,8 @@
       <!-- Phần dưới với chi tiết mô tả sản phẩm -->
       <div class="details-section">
         <h3 @click="toggleDetails" class="details-header">
-          Chi tiết sản phẩm <i :class="detailsOpen ? 'fas fa-minus' : 'fas fa-plus'"></i>
+          <i class="fas fa-info-circle"></i> Chi tiết sản phẩm 
+          <i :class="detailsOpen ? 'fas fa-minus' : 'fas fa-plus'"></i>
         </h3>
         <transition name="fade">
           <div v-if="detailsOpen" class="details-content">
@@ -53,6 +59,7 @@
     </div>
   </div>
 </template>
+
 
 
 
@@ -163,60 +170,101 @@ export default {
 .product-detail {
   display: flex;
   flex-direction: column;
-  gap: 40px;
-  padding: 40px;
+  gap: 30px;
+  padding: 20px;
   background-color: #f9f9f9;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   font-family: 'Roboto', Arial, sans-serif; /* Font hiện đại */
+  max-width: 1200px;
+  margin: auto;
 }
 
 .top-section {
   display: flex;
-  gap: 40px;
-  justify-content: center;
+  gap: 20px;
+  justify-content: space-between;
   align-items: flex-start;
 }
 
-.left-column,
-.right-column {
-  flex: 1;
+.left-column {
+  flex: 1; /* Đảm bảo hình ảnh không chiếm toàn bộ không gian */
   display: flex;
-  flex-direction: column; /* Các phần tử xếp theo chiều dọc */
-  align-items: flex-start; /* Căn trái các phần tử */
-  gap: 10px; /* Khoảng cách nhỏ giữa các phần tử */
+  justify-content: center;
+  align-items: center;
+}
+
+.right-column {
+  flex: 1.2; /* Thông tin bên phải chiếm nhiều không gian hơn */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.image-container {
+  position: relative;
+  width: 100%; /* Hình ảnh chiếm toàn bộ chiều rộng container */
+  max-width: 400px; /* Giới hạn chiều rộng tối đa */
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-image {
+  width: 100%; /* Đảm bảo hình ảnh tự co dãn theo container */
+  height: auto;
+}
+
+.stock-status {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #28a745;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.stock-status.out-of-stock {
+  background-color: #dc3545;
 }
 
 h2 {
-  font-size: 2rem;
+  font-size: 1.8rem;
   color: #333;
-  text-align: left; /* Căn chữ sang trái */
-  margin: 0; /* Loại bỏ margin mặc định */
 }
 
 .price {
   font-size: 1.5rem;
   color: #e67e22;
   font-weight: bold;
-  text-align: left; /* Căn chữ sang trái */
-  margin: 0; /* Loại bỏ margin mặc định */
 }
 
 .size-selection {
-  display: flex; /* Sử dụng Flexbox để căn chỉnh hàng ngang */
-  align-items: center; /* Căn giữa label và các nút chọn */
-  gap: 15px; /* Khoảng cách giữa label và các nút */
-  text-align: left; /* Căn chữ sang trái */
-  width: 100%; /* Đảm bảo chiếm toàn bộ chiều rộng của container */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.size-selection label {
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #34495e;
 }
 
 .size-buttons {
   display: flex;
-  gap: 10px; /* Khoảng cách giữa các nút chọn */
+  gap: 10px;
 }
 
 .size-buttons button {
-  padding: 10px 20px;
+  padding: 10px 15px;
   border: 1px solid #ddd;
   background-color: #fff;
   cursor: pointer;
@@ -229,67 +277,19 @@ h2 {
   border-color: #007bff;
 }
 
-.size-buttons button:hover {
-  background-color: #f0f0f0;
-}
-
-
 .add-to-cart {
-  padding: 15px 30px;
+  padding: 12px 20px;
   background-color: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 1.2rem;
-  transition: background-color 0.3s;
-  margin-top: 10px; /* Tạo khoảng cách giữa nút và các phần tử khác */
-}
-
-.image-container {
-  position: relative;
-  display: flex;
-  justify-content: center;
-}
-
-.product-image {
-  max-width: 300px;
-  height: auto;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.stock-status {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background-color: #28a745;
-  color: white;
-  padding: 5px 10px;
-  border-radius: 4px;
-  font-size: 0.9em;
-}
-
-.stock-status.out-of-stock {
-  background-color: #dc3545;
-}
-
-h2 {
-  font-size: 2rem;
-  color: #333;
-}
-
-p {
   font-size: 1rem;
-  color: #555;
-}
-
-.size-buttons button {
-  padding: 10px 20px;
-  border: 1px solid #ddd;
-  background-color: #fff;
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px; /* Khoảng cách giữa icon và chữ */
+  transition: background-color 0.3s;
 }
 
 .add-to-cart:hover {
@@ -323,11 +323,6 @@ p {
   justify-content: space-between;
 }
 
-.details-header i {
-  margin-left: 10px;
-  transition: transform 0.3s;
-}
-
 .details-content {
   margin-top: 10px;
   font-size: 1rem;
@@ -335,7 +330,6 @@ p {
   line-height: 1.6;
 }
 
-/* Hiệu ứng chuyển đổi */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.3s;
@@ -345,5 +339,4 @@ p {
 .fade-leave-to {
   opacity: 0;
 }
-
 </style>

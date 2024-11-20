@@ -1,38 +1,58 @@
 <template>
-    <div class="shoes-container">
-      <div class="controls">
-        <input v-model="searchQuery" placeholder="Search products..." />
-        <select v-model="sortOrder" @change="sortProducts">
-          <option value="asc">Price: Low to High</option>
-          <option value="desc">Price: High to Low</option>
-        </select>
-      </div>
-      <div class="product-list">
-        <router-link
-          v-for="product in paginatedProducts"
-          :key="product.id"
-          :to="{ name: 'ProductDetail', params: { id: product.id } }"
-          class="no-underline"
-        >
-          <div class="product-card">
-            <div class="stock-status" :class="{ 'out-of-stock': product.quantity === 0 }">
-              {{ product.quantity > 0 ? 'Còn hàng' : 'Hết hàng' }}
-            </div>
-            <img :src="product.imageUrl" :alt="product.productName" class="product-image" />
-            <h2>{{ product.productName }}</h2>
-            <p>{{ product.description }}</p>
-            <p>Price: {{ product.priceRange }} VND</p>
-            <span class="rating">⭐ {{ product.starRating }}</span>
-          </div>
-        </router-link>
-      </div>
-      <div class="pagination">
-        <button v-if="currentPage > 1" @click="prevPage" >Previous</button>
-        <span>Page {{ currentPage }} of {{ totalPages }}</span>
-        <button v-if="currentPage < totalPages" @click="nextPage">Next</button>
-      </div>
+  <div class="shoes-container">
+    <!-- Phần bộ lọc và sắp xếp -->
+    <div class="controls">
+      <input v-model="searchQuery" placeholder="🔍 Tìm kiếm sản phẩm..." />
+      <select v-model="sortOrder" @change="sortProducts">
+        <option value="asc">⬆️ Giá: Thấp đến Cao</option>
+        <option value="desc">⬇️ Giá: Cao đến Thấp</option>
+      </select>
     </div>
-  </template>
+
+    <!-- Danh sách sản phẩm -->
+    <div class="product-list">
+      <router-link
+        v-for="product in paginatedProducts"
+        :key="product.id"
+        :to="{ name: 'ProductDetail', params: { id: product.id } }"
+        class="no-underline"
+      >
+        <div class="product-card">
+          <!-- Trạng thái tồn kho -->
+          <div class="stock-status" :class="{ 'out-of-stock': product.quantity === 0 }">
+            <i class="fas" :class="product.quantity > 0 ? 'fa-check-circle' : 'fa-times-circle'"></i>
+            {{ product.quantity > 0 ? 'Còn hàng' : 'Hết hàng' }}
+          </div>
+
+          <!-- Hình ảnh sản phẩm -->
+          <img :src="product.imageUrl" :alt="product.productName" class="product-image" />
+
+          <!-- Tên sản phẩm -->
+          <h2><i class="fas fa-box-open"></i> {{ product.productName }}</h2>
+
+          <!-- Mô tả sản phẩm -->
+          <p><i class="fas fa-info-circle"></i> {{ product.description }}</p>
+
+          <!-- Giá sản phẩm -->
+          <p class="price"><i class="fas fa-tag"></i> Giá: {{ product.priceRange.toLocaleString() }} VND</p>
+
+          <!-- Đánh giá sản phẩm -->
+          <span class="rating">
+            <i class="fas fa-star"></i> {{ product.starRating }}
+          </span>
+        </div>
+      </router-link>
+    </div>
+
+    <!-- Phân trang -->
+    <div class="pagination">
+      <button v-if="currentPage > 1" @click="prevPage">⬅️ Trước</button>
+      <span>Trang {{ currentPage }} / {{ totalPages }}</span>
+      <button v-if="currentPage < totalPages" @click="nextPage">Tiếp ➡️</button>
+    </div>
+  </div>
+</template>
+
   
   <script>
   import axios from 'axios';
@@ -99,15 +119,15 @@
   </script>
   
   <style scoped>
-  @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
 
 .shoes-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  background-color: #f4f6f9; /* Nền sáng hiện đại */
-  font-family: 'Roboto', Arial, sans-serif; /* Font hiện đại */
+  background-color: #f4f6f9;
+  font-family: 'Roboto', Arial, sans-serif;
 }
 
 .controls {
@@ -136,13 +156,12 @@
 
 .product-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Bố cục lưới tự động */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
   justify-content: center;
   width: 100%;
-  grid-auto-rows: 1fr; /* Đảm bảo chiều cao đồng đều */
+  grid-auto-rows: 1fr;
 }
-
 
 .no-underline {
   text-decoration: none;
@@ -160,19 +179,19 @@
   justify-content: space-between;
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  min-height: 400px; /* Đặt chiều cao tối thiểu */
+  min-height: 400px;
 }
 
 .product-card:hover {
-  transform: translateY(-10px); /* Nhẹ nhàng nâng lên */
+  transform: translateY(-10px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .stock-status {
   position: absolute;
   top: 10px;
-  right: 10px; /* Di chuyển trạng thái sang góc phải */
-  background-color: #27ae60; /* Màu xanh lá cây */
+  right: 10px;
+  background-color: #27ae60;
   color: white;
   padding: 6px 12px;
   border-radius: 20px;
@@ -184,12 +203,12 @@
 }
 
 .stock-status.out-of-stock {
-  background-color: #e74c3c; /* Màu đỏ nếu hết hàng */
+  background-color: #e74c3c;
 }
 
 .product-image {
   width: 100%;
-  height: 200px; /* Tăng chiều cao hình ảnh */
+  height: 200px;
   object-fit: cover;
   border-radius: 10px;
   margin-bottom: 15px;
@@ -198,8 +217,12 @@
 h2 {
   font-size: 1.2rem;
   font-weight: bold;
-  color: #2c3e50; /* Xanh đậm chuyên nghiệp */
+  color: #2c3e50;
   margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
 }
 
 p {
@@ -208,9 +231,19 @@ p {
   margin-bottom: 10px;
 }
 
+p.price {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #34495e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
 .rating {
   font-size: 1rem;
-  color: #f39c12; /* Màu vàng cho sao */
+  color: #f39c12;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -240,7 +273,7 @@ p {
 }
 
 .pagination button:hover {
-  background-color: #2980b9; /* Tông xanh đậm khi hover */
+  background-color: #2980b9;
 }
 
 .pagination span {
@@ -248,5 +281,4 @@ p {
   font-weight: bold;
   color: #34495e;
 }
-
-  </style>
+</style>
