@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User'); // Model User
-const JWT_SECRET = '034846806501657297629'; // Secret key bảo mật
+const JWT_SECRET = 'dientokencuabanvao'; // Secret key bảo mật
 
 // API đăng ký
 exports.register = async (req, res) => {
