@@ -1,7 +1,7 @@
 const { Sequelize } = require('sequelize');
 
 // Cấu hình thông tin kết nối MySQL
-const sequelize = new Sequelize('webbh', 'root', '081004', {
+const sequelize = new Sequelize('webbh', 'root', 'pass', {
     host: 'localhost',
     dialect: 'mysql',
     logging: true // xác minh câu lênh sql được thực thi
