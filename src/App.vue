@@ -4,8 +4,8 @@
 </template>
 
 <script>
-import ComFooter from './components/ComFooter.vue';
-import ComHeader from './components/ComHeader.vue';
+import ComFooter from './components/common/ComFooter.vue';
+import ComHeader from './components/common/ComHeader.vue';
 
 export default {
   name: 'App',

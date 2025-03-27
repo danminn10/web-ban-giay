@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import ComProduct from './ComProduct.vue';
+import ComProduct from '../products/ComProduct.vue';
 import '@/components/css/ComHome.css';
 import axios from 'axios';
 

@@ -1,19 +1,19 @@
+import ComAbout from "@/components/pages/ComAbout.vue";
+import ComCart from "@/components/pages/ComCart.vue";
+import ComContact from "@/components/pages/ComContact.vue";
+import ComHome from "@/components/pages/ComHome.vue";
+import ComLogin from "@/components/pages/ComLogin.vue";
+import ComProductDetail from "@/components/pages/ComProductDetail.vue";
+import ComRegister from "@/components/pages/ComRegister.vue";
+import ComShoes from "@/components/pages/ComShoes.vue";
+import ComThanhToan from "@/components/pages/ComThanhToan.vue";
+import ComTinTuc from "@/components/pages/ComTinTuc.vue";
 import { createWebHistory, createRouter } from "vue-router";
-import ComHome from "@/components/ComHome.vue";
-import ComShoes from "@/components/ComShoes.vue";
-import ComTinTuc from "@/components/ComTinTuc.vue";
-import ComAbout from "@/components/ComAbout.vue";
-import ComLogin from "@/components/ComLogin.vue";
-import ComRegister from "@/components/ComRegister.vue";
-import ComContact from "@/components/ComContact.vue";
-import ComProductDetail from "@/components/ComProductDetail.vue";
-import ComCart from "@/components/ComCart.vue";
-import ComThanhToan from "@/components/ComThanhToan.vue";
 const routes = [
     {
         path: "/",
         name: "Home",
-        component: ComHome,
+        component: ComHome
     },
     {
         path: "/shoes",
